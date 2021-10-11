@@ -41,26 +41,25 @@
             </div>
 
             <div class="form-group">
+              <label for="category">Type</label>
+              <select class="form-control" name="type">
+                  <option value=""></option>
+                  @foreach($types as $type)
+                    <option value="{{ $type->id }}" @if(old('type') == $type->id) selected @endif>{{ $type->name }}</option>
+                  @endforeach
+              </select>
+              @error('type')
+                <div class="error">{{ $message }}</div>
+              @enderror
+            </div>
+
+            <div class="form-group">
               <label for="description">Description de l'organisation</label>
               <textarea class="form-control" name="description" cols="30" rows="5" placeholder="Contenu de l'article">{{ old('description') }}</textarea>
               @error('description')
                 <div class="error">{{ $message }}</div>
               @enderror
             </div>
-
-            {{-- <div class="form-group">
-              <label for="category">Catégorie</label>
-              <select class="form-control" name="category">
-                  <option value=""></option>
-                  @foreach($categories as $category)
-                    <option value="{{ $category->id }}" @if(old('category') == $category->id) selected @endif>{{ $category->name }}</option>
-                  @endforeach
-              </select>
-              @error('category')
-                <div class="error">{{ $message }}</div>
-              @enderror
-            </div> --}}
-
             <button type="submit" class="btn btn-primary">Ajouter</button>
           </form>
 

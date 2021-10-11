@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Type;
 use Illuminate\Support\Str;
 use App\Models\Organisation;
 use Illuminate\Http\Request;
@@ -34,9 +35,12 @@ class OrganisationController extends Controller
     public function create()
     {
         //retourne un formulaire de création d'organisation(avant il faut etre authentifié)
-        return view('organisations.create');
+        $types = Type::get();
+        $data = [
+            'types' => $types
+        ];
+        return view('organisations.create',$data);
     }
-
     /**
      * Store a newly created resource in storage.
      *
@@ -46,7 +50,24 @@ class OrganisationController extends Controller
     public function store(Request $request)
     {
         //traiter les données les verifier et les enregistré en base de donnée envoyé par le formulaire de creation
-        dump($request->all());
+        $request->validate([
+            'nom'=>['required','unique:Organisations,name'],
+            'description' =>['required'],
+            'type' => ['exists:types,id']
+
+        ]);
+        // $organisation = new Organisation();
+        // $organisation->id_type = request('type');
+        // $organisation->name = request('nom');
+        // $organisation->description = request('description');
+        // $organisation->save();
+        $organisation = Organisation::create([
+            'id_type' => request('type'),
+            'name' => request('nom'),
+            'description' => request('description'),
+        ]);
+        $success = 'Organisation ajoutée';
+        return back()->withSuccess($success);
     }
 
     /**
