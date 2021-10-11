@@ -19,9 +19,7 @@ Route::resources([
     'organisations' => OrganisationController::class,
     'types' => TypeController::class,
 ]);
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/',[OrganisationController::class,'index']);
 
 Route::get('/test', function () {
     return view('test');

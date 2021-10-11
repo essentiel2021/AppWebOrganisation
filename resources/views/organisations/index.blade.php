@@ -11,10 +11,7 @@
   <table class="table">
     <thead>
       <tr>
-        <th scope="col">#</th>
-        <th scope="col">First</th>
-        <th scope="col">Last</th>
-        <th scope="col">Handle</th>
+        <th scope="col"><a class="btn btn-primary" href="{{ route('organisations.create') }}" role="button">Ajouter une organisation</a></th>
       </tr>
     </thead>
     <tbody>

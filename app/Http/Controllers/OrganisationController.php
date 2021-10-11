@@ -33,7 +33,8 @@ class OrganisationController extends Controller
      */
     public function create()
     {
-        //retourne un formulaire de création d'organisation(avant il faut etre authentifié) 
+        //retourne un formulaire de création d'organisation(avant il faut etre authentifié)
+        return view('organisations.create');
     }
 
     /**
@@ -45,6 +46,7 @@ class OrganisationController extends Controller
     public function store(Request $request)
     {
         //traiter les données les verifier et les enregistré en base de donnée envoyé par le formulaire de creation
+        dump($request->all());
     }
 
     /**
