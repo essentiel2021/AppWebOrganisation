@@ -28,13 +28,13 @@
         </div>
         <div class="card-body">
           
-          <form action="{{ route('organisations.store') }}" method="post">
-
+          <form action="{{ route('organisations.update',['organisation'=> $organisation->id]) }}" method="post">
+            @method('PUT')
             @csrf
 
             <div class="form-group">
               <label for="name">Nom de l'organisation</label>
-              <input type="text" name="name" class="form-control" value="{{ old('name') }}">
+              <input type="text" name="name" class="form-control" value="{{ old('name',$organisation->name) }}">
               @error('name')
                 <div class="error">{{ $message }}</div>
               @enderror
@@ -45,7 +45,7 @@
               <select class="form-control" name="type">
                   <option value=""></option>
                   @foreach($types as $type)
-                    <option value="{{ $type->id }}" @if(old('type') == $type->id) selected @endif>{{ $type->name }}</option>
+                    <option value="{{ $type->id }}" @if(old('type',$organisation->description) == $type->id) selected @endif>{{ $type->name }}</option>
                   @endforeach
               </select>
               @error('type')
@@ -55,7 +55,7 @@
 
             <div class="form-group">
               <label for="description">Description de l'organisation</label>
-              <textarea class="form-control" name="description" cols="30" rows="5" placeholder="Contenu de l'article">{{ old('description') }}</textarea>
+              <textarea class="form-control" name="description" cols="30" rows="5" placeholder="Contenu de l'article">{{ old('description',$organisation->description) }}</textarea>
               @error('description')
                 <div class="error">{{ $message }}</div>
               @enderror

@@ -50,8 +50,9 @@ class OrganisationController extends Controller
     public function store(Request $request)
     {
         //traiter les données les verifier et les enregistré en base de donnée envoyé par le formulaire de creation
+        //traiter les données les verifier et les enregistré en base de donnée envoyé par le formulaire de creation
         $request->validate([
-            'nom'=>['required','unique:Organisations,name'],
+            'name'=>['required','unique:Organisations,name'],
             'description' =>['required'],
             'type' => ['exists:types,id']
 
@@ -63,7 +64,7 @@ class OrganisationController extends Controller
         // $organisation->save();
         $organisation = Organisation::create([
             'id_type' => request('type'),
-            'name' => request('nom'),
+            'name' => request('name'),
             'description' => request('description'),
         ]);
         $success = 'Organisation ajoutée';
@@ -93,10 +94,14 @@ class OrganisationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Organisation $organisation)
     {
         //modification d'une organisation spécifique en fonction de son id
-        return 'Je suis l\'organisation qui doit etre modifier,dont le id est : '.$id; 
+        $data = [
+            'organisation' => $organisation,
+            'types' => Type::get()
+        ];
+        return view('organisations.edit',$data);
 
     }
 
