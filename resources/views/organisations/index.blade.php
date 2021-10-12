@@ -17,12 +17,23 @@
     <tbody>
       
       @foreach ($organisations as $organisation)
+      <div class="col-lg-10">
+        @if(session('success'))
+            <div class="alert alert-success">{{ session('success') }}</div>
+          @endif
+      </div>
       <tr>
             <td>{{$organisation->name}}</td>
             <td>{{$organisation->type->name}}</td>
             <td><a class="btn btn-primary" href="{{ route('organisations.show',['organisation'=> $organisation->id]) }}" role="button">Afficher</a></td>
             <td><a class="btn btn-primary" href="{{ route('organisations.edit',['organisation'=> $organisation->id]) }}" role="button">Modifier</a></td>
-            <td><a class="btn btn-danger" href="{{ route('organisations.destroy',['organisation'=> $organisation->id]) }}" role="button">Supprimer</a></td>
+            <td>
+              <form action="{{ route('organisations.destroy',['organisation'=> $organisation->id]) }}" method="post">
+                @method('DELETE')
+                @csrf
+                <button type="submit" class="btn btn-danger">Supprimer</button>
+              </form>
+            </td>
       </tr>
       @endforeach
     </tbody>

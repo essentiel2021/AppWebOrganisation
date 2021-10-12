@@ -24,7 +24,7 @@
 
       <div class="card card-outline-secondary my-4">
         <div class="card-header">
-          Ajouter une organisation
+          Modifier une organisation
         </div>
         <div class="card-body">
           
@@ -60,7 +60,7 @@
                 <div class="error">{{ $message }}</div>
               @enderror
             </div>
-            <button type="submit" class="btn btn-primary">Ajouter</button>
+            <button type="submit" class="btn btn-primary">Modifier</button>
           </form>
 
         </div>

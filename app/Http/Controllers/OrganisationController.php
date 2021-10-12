@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\OrganisationRequest;
 use App\Models\Type;
 use Illuminate\Support\Str;
 use App\Models\Organisation;
@@ -47,31 +48,30 @@ class OrganisationController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(OrganisationRequest $request)
     {
-        //traiter les données les verifier et les enregistré en base de donnée envoyé par le formulaire de creation
-        $organisation = Organisation::create($request->validate([
-            'name'=>['required','unique:Organisations,name'],
-            'description' =>['required'],
-            'type' => ['exists:types,id']
-
-        ]));
-        $organisation->id_type = request('type',null);
+        $validatedData = $request->validated();
+        $validatedData['id_type'] = request('type');
+        $organisation=Organisation::create($validatedData);
+        $organisation->code = $this->codeAleatoire();
         $organisation->save();
-        // $organisation = new Organisation();
-        // $organisation->id_type = request('type');
-        // $organisation->name = request('nom');
-        // $organisation->description = request('description');
-        // $organisation->save();
-        // $organisation = Organisation::create([
-        //     'id_type' => request('type'),
-        //     'name' => request('nom'),
-        //     'description' => request('description'),
-        // ]);
         $success = 'Organisation ajoutée';
         return back()->withSuccess($success);
     }
-
+    public function codeAleatoire($longueur = 7){
+        $chaines = null;
+        $caracteres = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $longueurMax = strlen($caracteres);
+        for ($i = 0; $i < $longueur; $i++)
+        {
+            $chaines .= $caracteres[rand(0, $longueurMax - 1)];
+        }
+        $organisation = Organisation::where('code', $chaines)->first();
+        if($organisation != null){
+            return $this->codeAleatoire();
+        }
+        return $chaines;
+    }
     /**
      * Display the specified resource.
      *
@@ -113,10 +113,14 @@ class OrganisationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(OrganisationRequest $request, Organisation $organisation)
     {
         //verifier les données et mettre à jour l'organistion spéfique en base de donnée
-
+        $validatedData = $request->validated();
+        $validatedData['id_type'] = request('type');
+        Organisation::updateOrCreate(['id'=>$organisation->id],$validatedData);
+        $success = 'Organisation modifieé';
+        return back()->withSuccess($success);
     }
 
     /**
@@ -125,9 +129,11 @@ class OrganisationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Organisation $organisation)
     {
         //supprimer l'organisation
-        return 'Je suis l\'organisation qui doit etre supprimer,dont le id est : '.$id; 
+        $organisation->delete();
+        $success = 'Organisation surpprimée';
+        return back()->withSuccess($success);
     }
 }
