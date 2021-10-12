@@ -10,11 +10,11 @@
 <body>
   <div class="row">
 
-    <div class="col-lg-3">
+    <div class="col-lg-1">
     </div>
     <!-- /.col-lg-3 -->
 
-    <div class="col-lg-9">
+    <div class="col-lg-10">
 
       @if(session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>
@@ -68,8 +68,7 @@
       <!-- /.card -->
 
     </div>
-    <!-- /.col-lg-9 -->
-
+    <div class="col-lg-1"></div>
   </div>
 </body>
 </html>
