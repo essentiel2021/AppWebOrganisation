@@ -50,22 +50,24 @@ class OrganisationController extends Controller
     public function store(Request $request)
     {
         //traiter les données les verifier et les enregistré en base de donnée envoyé par le formulaire de creation
-        $request->validate([
-            'nom'=>['required','unique:Organisations,name'],
+        $organisation = Organisation::create($request->validate([
+            'name'=>['required','unique:Organisations,name'],
             'description' =>['required'],
             'type' => ['exists:types,id']
 
-        ]);
+        ]));
+        $organisation->id_type = request('type',null);
+        $organisation->save();
         // $organisation = new Organisation();
         // $organisation->id_type = request('type');
         // $organisation->name = request('nom');
         // $organisation->description = request('description');
         // $organisation->save();
-        $organisation = Organisation::create([
-            'id_type' => request('type'),
-            'name' => request('nom'),
-            'description' => request('description'),
-        ]);
+        // $organisation = Organisation::create([
+        //     'id_type' => request('type'),
+        //     'name' => request('nom'),
+        //     'description' => request('description'),
+        // ]);
         $success = 'Organisation ajoutée';
         return back()->withSuccess($success);
     }
@@ -93,10 +95,14 @@ class OrganisationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Organisation $organisation)
     {
         //modification d'une organisation spécifique en fonction de son id
-        return 'Je suis l\'organisation qui doit etre modifier,dont le id est : '.$id; 
+        $data = [
+            'organisation' => $organisation,
+            'types' => Type::get()
+        ];
+        return view('organisations.edit',$data);
 
     }
 
@@ -110,6 +116,7 @@ class OrganisationController extends Controller
     public function update(Request $request, $id)
     {
         //verifier les données et mettre à jour l'organistion spéfique en base de donnée
+
     }
 
     /**
